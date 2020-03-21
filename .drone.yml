@@ -17,5 +17,6 @@ steps:
   image: alpine
   commands:
   - echo hellow
+  - pwd
   - ls -la build
 
