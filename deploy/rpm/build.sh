@@ -6,8 +6,8 @@
 CURDIR=`pwd`
 
 # setup RPM build space
-mkdir /rpm
-cd /rpm
+mkdir /drone/rpm
+cd /drone/rpm
 mkdir -p BUILD RPMS/`uname -i` SOURCES SPECS SRPMS
 
 # create rpm macro file
@@ -17,16 +17,17 @@ cat <<EOF >> ~/.rpmmacros
 
 %packager      RPM Builds <builds@avalabs.org>
 %vendor        AVALabs
-%_topdir       /rpm
+%_topdir       /drone/rpm
 EOF
 
 # copy files into rpm build directories
-cp /drone/src/build/ava /rpm/SOURCES/
-cp /drone/src/build/xputtest /rpm/SOURCES/
-cp /drone/src/deploy/rpm/ava.spec /rpm/SPECS/
+cp /drone/src/build/ava %{_topdir}/SOURCES/
+cp /drone/src/build/xputtest %{_topdir}/SOURCES/
+cp /drone/src/deploy/rpm/ava.spec %{_topdir}/SPECS/
 
 # install system build tools
 yum -y install rpm-build
 
 # build RPM
 rpmbuild -bb ava.spec
+
