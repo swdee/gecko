@@ -13,10 +13,15 @@ steps:
   - apt-get -y install cmake libssl-dev libuv1-dev
   - scripts/build.sh
 
-- name: test
-  image: alpine
-  commands:
-  - echo hellow
-  - pwd
-  - ls -la build
+#- name: test
+#  image: alpine
+#  commands:
+#  - echo hellow
+#  - pwd
+#  - ls -la build
 
+
+- name: fedora-31
+  image: fedora:31
+  commands:
+  - deploy/rpm/build.sh
