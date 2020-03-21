@@ -4,11 +4,10 @@ name: gecko
 
 steps:
 - name: build-ava
-  image: ubuntu:bionic
+  image: golang:1.13.9-buster
   when:
     branch: master
     event: push
   commands:
-  - apt-get -y install go
   - scripts/build.sh
 
