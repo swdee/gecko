@@ -35,3 +35,7 @@ yum -y install rpm-build
 cd $RPMDIR/SPECS/
 rpmbuild -bb ava.spec
 
+# install RPM and test the binaries are working
+rpm -ivh $RPMDIR/RPMS/x86_64/avalabs-gecko-*.`uname -i`.rpm
+ava --help
+xputtest --help
