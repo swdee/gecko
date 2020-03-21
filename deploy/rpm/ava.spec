@@ -7,6 +7,7 @@ Source0: ava
 Source1: xputtest
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 License: BSD 3-Clause License
+Requires: libuv
 
 %description
 AVALabs Gecko a Golang implementation of an AVA Node
