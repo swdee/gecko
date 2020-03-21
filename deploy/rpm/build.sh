@@ -32,5 +32,6 @@ cp /drone/src/deploy/rpm/ava.spec $RPMDIR/SPECS/
 yum -y install rpm-build
 
 # build RPM
+cd $RPMDIR/SPECS/
 rpmbuild -bb ava.spec
 
