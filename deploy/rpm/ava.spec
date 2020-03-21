@@ -13,8 +13,8 @@ AVALabs Gecko a Golang implementation of an AVA Node
 
 %install
 %{__mkdir_p} %{buildroot}/usr/bin/
-%{__install} -Dp -m0755 %{source0} %{buildroot}/usr/bin/ava
-%{__install} -Dp -m0755 %{source1} %{buildroot}/usr/bin/xputtest
+%{__install} -Dp -m0755 %{SOURCE0} %{buildroot}/usr/bin/ava
+%{__install} -Dp -m0755 %{SOURCE1} %{buildroot}/usr/bin/xputtest
 
 %clean
 %{__rm} -rf %{buildroot}
