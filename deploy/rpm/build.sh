@@ -6,8 +6,8 @@
 CURDIR=`pwd`
 
 # setup RPM build space
-mkdir /drone/rpm
-cd /drone/rpm
+mkdir /tmp/rpm
+cd /tmp/rpm
 mkdir -p BUILD RPMS/`uname -i` SOURCES SPECS SRPMS
 
 # create rpm macro file
@@ -17,7 +17,7 @@ cat <<EOF >> ~/.rpmmacros
 
 %packager      RPM Builds <builds@avalabs.org>
 %vendor        AVALabs
-%_topdir       /drone/rpm
+%_topdir       /tmp/rpm
 EOF
 
 # copy files into rpm build directories
