@@ -1,11 +1,13 @@
 kind: pipeline
 type: docker
-name: default
+name: gecko
 
 steps:
-- name: greeting
-  image: alpine
+- name: build-ava
+  image: ubuntu:bionic
+  when:
+    branch: master
+    event: push
   commands:
-  - echo hello
-  - echo world
+  - scripts/build.sh
 
