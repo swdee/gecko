@@ -9,6 +9,7 @@ steps:
     branch: master
     event: push
   commands:
-  - apt-get -y install cmake
+  - apt-get -y update
+  - apt-get -y install cmake libssl-dev libuv1-dev
   - scripts/build.sh
 
