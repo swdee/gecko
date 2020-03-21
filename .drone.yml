@@ -12,4 +12,10 @@ steps:
   - apt-get -y update
   - apt-get -y install cmake libssl-dev libuv1-dev
   - scripts/build.sh
-  - ls -la build/
+
+- name: test
+  image: alpine
+  commands:
+  - echo hellow
+  - ls -la build
+
