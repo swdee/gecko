@@ -2,9 +2,6 @@
 #
 # script used for building RPM packages
 
-# get current directory
-CURDIR=`pwd`
-
 # directory to build RPMs in
 RPMDIR=/tmp/rpm
 

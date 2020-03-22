@@ -1,0 +1,9 @@
+Source: avalabs-gecko
+Section: misc
+Priority: optional
+Maintainer: builds <builds@avalabs.org>
+
+Package: avalabs-gecko
+Architecture: amd64
+Depends: libuv1
+Description: AVALabs Gecko a Golang implementation of an AVA Node
