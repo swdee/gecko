@@ -26,11 +26,18 @@ steps:
 #  volumes:
 #  - name: hostdir
 #    path: /tmp/hostdir
+  volumes:
+  - name: cache
+    path: /cache
   commands:
   - deploy/rpm/build.sh
+  - cp /tmp/rpm/RPMS/x86_64/*.rpm /cache/
 
 - name: scp files
   image: appleboy/drone-scp
+  volumes:
+    - name: cache
+      path: /cache
   settings:
     host: 50.116.4.66
     username: root
@@ -38,7 +45,7 @@ steps:
       from_secret: ssh_password
     port: 22
     target: /tmp/build/
-    source: /tmp/rpm/RPMS/x86_64/*.rpm
+    source: /cache/*.rpm
 
 #- name: ubuntu-18.04
 #  image: ubuntu:bionic
@@ -49,3 +56,7 @@ steps:
 #- name: hostdir
 #  host:
 #    path: /tmp/build
+
+volumes:
+- name: cache
+  temp: {}
