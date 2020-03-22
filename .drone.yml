@@ -23,5 +23,18 @@ steps:
 
 - name: fedora-31
   image: fedora:31
+  volumes:
+  - name: hostdir
+    path: /tmp/hostdir
   commands:
   - deploy/rpm/build.sh
+
+#- name: ubuntu-18.04
+#  image: ubuntu:bionic
+#  commands:
+#    - deploy/deb/build.sh
+
+volumes:
+- name: hostdir
+  host:
+    path: /tmp/build
