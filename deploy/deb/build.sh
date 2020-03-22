@@ -55,9 +55,6 @@ cp /drone/src/deploy/deb/rules .
 cd ${BUILDDIR}/${PKGDIR}
 dpkg-buildpackage
 
-# debug built files
-ls -la ${BUILDDIR}/
-
 # install deb and test binaries are working
 apt-get -y install ${BUILDDIR}/avalabs-gecko*.deb --fix-broken
 
