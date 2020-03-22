@@ -41,6 +41,3 @@ yum -y localinstall $RPMDIR/RPMS/x86_64/avalabs-gecko-*.`uname -i`.rpm
 # disable tests until exit codes are corrected in code
 #ava --help
 #xputtest --help
-
-# copy RPM to host directory
-cp $RPMDIR/RPMS/x86_64/*.rpm /tmp/hostdir/

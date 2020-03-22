@@ -23,18 +23,29 @@ steps:
 
 - name: fedora-31
   image: fedora:31
-  volumes:
-  - name: hostdir
-    path: /tmp/hostdir
+#  volumes:
+#  - name: hostdir
+#    path: /tmp/hostdir
   commands:
   - deploy/rpm/build.sh
+
+- name: scp files
+  image: appleboy/drone-scp
+  settings:
+    host: 50.116.4.66
+    username: root
+    password:
+      from_secret: ssh_password
+    port: 22
+    target: /tmp/build/
+    source: /tmp/rpm/RPMS/x86_64/*.rpm
 
 #- name: ubuntu-18.04
 #  image: ubuntu:bionic
 #  commands:
 #    - deploy/deb/build.sh
 
-volumes:
-- name: hostdir
-  host:
-    path: /tmp/build
+#volumes:
+#- name: hostdir
+#  host:
+#    path: /tmp/build
