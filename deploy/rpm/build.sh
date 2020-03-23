@@ -35,7 +35,7 @@ yum -y install rpm-build
 # must be in semantic version format 1.2.3 (major.minor.patch), or it will
 # be blank if no tag was set in which case the building is a nightly
 # snapshot
-if [ "${GIT_TAG}" eq "" ]; then
+if [ "${GIT_TAG}" == "" ]; then
     # nightly snapshot
     DATE=`date "+%Y%m%d"`
     RPM_VER="0.0"
