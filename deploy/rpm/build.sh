@@ -2,6 +2,11 @@
 #
 # script used for building RPM packages
 
+echo "TAG=${DRONE_TAG}"
+echo "COMMIT HASH=${DRONE_COMMIT_SHA:0:8}"
+echo "GIT_TAG=${GIT_TAG}"
+echo "GIT_COMMIT=${GIT_COMMIT}"
+
 # directory to build RPMs in
 RPMDIR=/tmp/rpm
 
