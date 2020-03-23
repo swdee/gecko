@@ -1,7 +1,7 @@
 Summary: AVALabs Gecko a Golang implementation of an AVA Node
-Name: avalabs-gecko 
-Version: %{getenv:RPM_VER}
-Release: %{getenv:RPM_REL}
+Name: avalabs-gecko
+Version: %%RPM_VER%%
+Release: %%RPM_REL%%
 URL: https://github.com/ava-labs/gecko/
 Source0: ava
 Source1: xputtest

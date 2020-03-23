@@ -50,8 +50,14 @@ else
     RPM_REL="${PATCH}"
 fi
 
-# build RPM
+# modify spec to replace our template variables
 cd $RPMDIR/SPECS/
+sed -i "s/%%RPM_VER%%/$RPM_VER/g" ava.spec
+sed -i "s/%%RPM_REL%%/$RPM_REL/g" ava.spec
+
+cat ava.spec
+
+# build RPM
 rpmbuild -bb ava.spec
 
 # install RPM and test the binaries are working
