@@ -20,7 +20,8 @@ steps:
 
 - name: fedora-31
   image: fedora:31
-  depends_on: build-ava
+  depends_on:
+  - build-ava
   volumes:
   - name: store
     path: /store
@@ -47,7 +48,8 @@ steps:
 
 - name: ubuntu-18.04
   image: ubuntu:bionic
-  depends_on: build-ava
+  depends_on:
+  - build-ava
   volumes:
   - name: store
     path: /store
@@ -61,7 +63,9 @@ steps:
 
 - name: test
   image: alpine
-  depends_on: [ fedora-31, ubuntu-18.04 ]
+  depends_on:
+  - fedora-31
+  - ubuntu-18.04
   volumes:
     - name: store
       path: /store
