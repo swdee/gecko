@@ -21,18 +21,18 @@ steps:
 #  - ls -la build
 
 
-- name: fedora-31
-  image: fedora:31
-  group: package
-  volumes:
-  - name: store
-    path: /store
-  environment:
-    GIT_TAG: "${DRONE_TAG}"
-    GIT_COMMIT: "${DRONE_COMMIT_SHA:0:8}"
-  commands:
-  - deploy/rpm/build.sh
-  - cp /tmp/rpm/RPMS/x86_64/*.rpm /store/
+#- name: fedora-31
+#  image: fedora:31
+#  group: package
+#  volumes:
+#  - name: store
+#    path: /store
+#  environment:
+#    GIT_TAG: "${DRONE_TAG}"
+#    GIT_COMMIT: "${DRONE_COMMIT_SHA:0:8}"
+#  commands:
+#  - deploy/rpm/build.sh
+#  - cp /tmp/rpm/RPMS/x86_64/*.rpm /store/
 
 #- name: scp files
 #  image: appleboy/drone-scp
@@ -48,12 +48,20 @@ steps:
 #    target: /tmp/build/
 #    source: /cache/*.rpm
 
-#- name: ubuntu-18.04
-#  image: ubuntu:bionic
-#  group: package
-#  commands:
-#    - apt-get -y update
-#    - deploy/deb/build.sh
+- name: ubuntu-18.04
+  image: ubuntu:bionic
+  group: package
+  volumes:
+  - name: store
+    path: /store
+  environment:
+    GIT_TAG: "${DRONE_TAG}"
+    GIT_COMMIT: "${DRONE_COMMIT_SHA:0:8}"
+  commands:
+    - apt-get -y update
+    - deploy/deb/build.sh
+    - cp /tmp/build/avalabs-gecko*.* /store/
+    - ls -la /store/
 
 volumes:
 - name: store

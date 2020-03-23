@@ -8,10 +8,32 @@ apt-get -y install build-essential devscripts debhelper
 # define directory for building
 BUILDDIR=/tmp/build
 
+# read in an set environment variables used in ava.spec file for defining
+# the version and release numbers
+#
+# drone passes $GIT_TAG to us which will contain the git tag name which
+# must be in semantic version format 1.2.3 (major.minor.patch), or it will
+# be blank if no tag was set in which case the building is a nightly
+# snapshot
+if [ "${GIT_TAG}" == "" ]; then
+    # nightly snapshot
+    DATE=`date "+%Y%m%d"`
+    RPM_VER="0.0"
+    RPM_REL="0.${DATE}git${GIT_COMMIT}"
+else
+    # tagged build
+    # split version components from tag
+    MAJOR=${GIT_TAG:0:1}
+    MINOR=${GIT_TAG:2:1}
+    PATCH=${GIT_TAG:4:1}
+    RPM_VER="${MAJOR}.${MINOR}"
+    RPM_REL="${PATCH}"
+fi
+
 # define package version using project major and minor version numbers
-VER="0.1"
+VER="${RPM_VER}"
 # define package release number
-REL="1"
+REL="${RPM_REL}"
 
 # create build directories
 mkdir $BUILDDIR

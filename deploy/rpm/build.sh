@@ -43,9 +43,9 @@ if [ "${GIT_TAG}" == "" ]; then
 else
     # tagged build
     # split version components from tag
-    MAJOR=${VER:0:1}
-    MINOR=${VER:2:1}
-    PATCH=${VER:4:1}
+    MAJOR=${GIT_TAG:0:1}
+    MINOR=${GIT_TAG:2:1}
+    PATCH=${GIT_TAG:4:1}
     RPM_VER="${MAJOR}.${MINOR}"
     RPM_REL="${PATCH}"
 fi
@@ -54,8 +54,6 @@ fi
 cd $RPMDIR/SPECS/
 sed -i "s/%%RPM_VER%%/$RPM_VER/g" ava.spec
 sed -i "s/%%RPM_REL%%/$RPM_REL/g" ava.spec
-
-cat ava.spec
 
 # build RPM
 rpmbuild -bb ava.spec
