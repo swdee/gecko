@@ -32,7 +32,7 @@ steps:
 #    GIT_COMMIT: "${DRONE_COMMIT_SHA:0:8}"
 #  commands:
 #  - deploy/rpm/build.sh
-#  - cp /tmp/rpm/RPMS/x86_64/*.rpm /store/
+
 
 #- name: scp files
 #  image: appleboy/drone-scp
@@ -60,7 +60,6 @@ steps:
   commands:
     - apt-get -y update
     - deploy/deb/build.sh
-    - cp /tmp/build/avalabs-gecko*.{dsc,gz,buildinfo,changes,deb} /store/
     - ls -la /store/
 
 volumes:

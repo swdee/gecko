@@ -5,5 +5,5 @@ Maintainer: builds <builds@avalabs.org>
 
 Package: avalabs-gecko
 Architecture: amd64
-Depends: libuv1
+Depends: ${shlibs:Depends} libuv1
 Description: AVALabs Gecko a Golang implementation of an AVA Node

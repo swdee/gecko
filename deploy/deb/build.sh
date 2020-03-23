@@ -83,3 +83,6 @@ apt-get -y install ${BUILDDIR}/avalabs-gecko*.deb --fix-broken
 # disable tests until exit codes are corrected in code
 #ava --help
 #xputtest --help
+
+# copy built rpm to mounted store volume
+cp ${BUILDDIR}/avalabs-gecko*.{dsc,gz,buildinfo,changes,deb} /store/
