@@ -2,6 +2,10 @@ kind: pipeline
 type: docker
 name: gecko
 
+volumes:
+  - name: store
+    temp: {}
+
 steps:
 - name: build-ava
   image: golang:1.13.9-buster
@@ -13,25 +17,18 @@ steps:
   - apt-get -y install cmake libssl-dev libuv1-dev
   - scripts/build.sh
 
-#- name: test
-#  image: alpine
-#  commands:
-#  - echo hellow
-#  - pwd
-#  - ls -la build
 
-
-#- name: fedora-31
-#  image: fedora:31
-#  group: package
-#  volumes:
-#  - name: store
-#    path: /store
-#  environment:
-#    GIT_TAG: "${DRONE_TAG}"
-#    GIT_COMMIT: "${DRONE_COMMIT_SHA:0:8}"
-#  commands:
-#  - deploy/rpm/build.sh
+- name: fedora-31
+  image: fedora:31
+  group: package
+  volumes:
+  - name: store
+    path: /store
+  environment:
+    GIT_TAG: "${DRONE_TAG}"
+    GIT_COMMIT: "${DRONE_COMMIT_SHA:0:8}"
+  commands:
+  - deploy/rpm/build.sh
 
 
 #- name: scp files
@@ -60,8 +57,13 @@ steps:
   commands:
     - apt-get -y update
     - deploy/deb/build.sh
+
+
+- name: test
+  image: alpine
+  volumes:
+    - name: store
+      path: /store
+  commands:
     - ls -la /store/
 
-volumes:
-- name: store
-  temp: {}
