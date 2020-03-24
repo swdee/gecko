@@ -9,8 +9,11 @@ echo "$GPG_PASSPHRASE" > $GPASS
 # import GPG key
 GKEY="/tmp/.gkey.asc"
 echo $GPG_KEY | base64 -d > $GKEY
-
 gpg --import --batch --pinentry-mode loopback --passphrase-file=$GPASS $GKEY
+
+# make the imported key trusted
+yum install -y expect
+expect -c "spawn gpg --edit-key --armor '<builds@avalabs.org>' trust quit; send \"5\ry\r\"; expect eof"
 
 gpg --list-keys
 gpg --list-secret-keys
