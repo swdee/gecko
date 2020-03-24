@@ -10,9 +10,7 @@ echo "$GPG_PASSPHRASE" > $GPASS
 GKEY="/tmp/.gkey.asc"
 echo $GPG_KEY | base64 -d > $GKEY
 
-cat $GKEY
-
-gpg --import $GKEY
+gpg --import --batch --pinentry-mode loopback --passphrase-file=$GPASS $GKEY
 
 exit 1
 
