@@ -12,7 +12,7 @@ echo $GPG_KEY | base64 -d > $GKEY
 gpg --import --batch --pinentry-mode loopback --passphrase-file=$GPASS $GKEY
 
 # make the imported key trusted
-yum -y install expect
+yum -y install expect procps
 KEY_ID=`gpg --list-keys --with-colons '<builds@avalabs.org>' | awk -F: '/^fpr:/ { print $10 }'`
 echo "Got Key ID=${KEY_ID}"
 expect -c "spawn gpg --edit-key ${KEY_ID} trust quit; send \"5\ry\r\"; expect eof"
@@ -79,6 +79,8 @@ sed -i "s/%%RPM_REL%%/$RPM_REL/g" ava.spec
 
 # build RPM
 rpmbuild -bb --sign ava.spec
+
+echo "DEBUG: signing done, do local install"
 
 # install RPM and test the binaries are working
 yum -y localinstall $RPMDIR/RPMS/x86_64/avalabs-gecko-*.`uname -i`.rpm
