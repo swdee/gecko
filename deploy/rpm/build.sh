@@ -12,6 +12,9 @@ echo $GPG_KEY | base64 -d > $GKEY
 
 gpg --import --batch --pinentry-mode loopback --passphrase-file=$GPASS $GKEY
 
+gpg --list-keys
+gpg --list-secret-keys
+
 exit 1
 
 # directory to build RPMs in
