@@ -13,7 +13,9 @@ gpg --import --batch --pinentry-mode loopback --passphrase-file=$GPASS $GKEY
 
 # make the imported key trusted
 yum install -y expect
-expect -c "spawn gpg --edit-key '<builds@avalabs.org>' trust quit; send \"5\ry\r\"; expect eof"
+KEY_ID=`gpg --list-keys --with-colons '<builds@avalabs.org>' | awk -F: '/^fpr:/ { print $10 }'`
+echo "key id=${KEY_ID}"
+expect -c "spawn gpg --edit-key ${KEY_ID} trust quit; send \"5\ry\r\"; expect eof"
 
 gpg --list-keys
 gpg --list-secret-keys
