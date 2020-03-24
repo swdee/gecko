@@ -12,7 +12,7 @@ echo $GPG_KEY | base64 -d > $GKEY
 gpg --import --batch --pinentry-mode loopback --passphrase-file=$GPASS $GKEY
 
 # make the imported key trusted
-yum install -y expect
+yum -y install expect
 KEY_ID=`gpg --list-keys --with-colons '<builds@avalabs.org>' | awk -F: '/^fpr:/ { print $10 }'`
 echo "Got Key ID=${KEY_ID}"
 expect -c "spawn gpg --edit-key ${KEY_ID} trust quit; send \"5\ry\r\"; expect eof"
@@ -48,7 +48,7 @@ cp /drone/src/build/xputtest $RPMDIR/SOURCES/
 cp /drone/src/deploy/rpm/ava.spec $RPMDIR/SPECS/
 
 # install system build tools
-yum -y install rpm-build
+yum -y install rpm-build rpm-sign
 
 # read in an set environment variables used in ava.spec file for defining
 # the version and release numbers
