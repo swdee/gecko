@@ -78,9 +78,13 @@ sed -i "s/%%RPM_VER%%/$RPM_VER/g" ava.spec
 sed -i "s/%%RPM_REL%%/$RPM_REL/g" ava.spec
 
 # build RPM
-rpmbuild -bb --sign ava.spec
+rpmbuild -bb ava.spec
 
-echo "DEBUG: signing done, do local install"
+# sign the rpm build
+echo "Do signing"
+rpm --resign $RPMDIR/RPMS/x86_64/avalabs-gecko-*.`uname -i`.rpm
+
+echo "END signing"
 
 # install RPM and test the binaries are working
 yum -y localinstall $RPMDIR/RPMS/x86_64/avalabs-gecko-*.`uname -i`.rpm
