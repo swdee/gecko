@@ -67,3 +67,10 @@ yum -y localinstall $RPMDIR/RPMS/x86_64/avalabs-gecko-*.`uname -i`.rpm
 
 # copy built rpm to mounted store volume
 cp $RPMDIR/RPMS/x86_64/*.rpm /store/
+
+# copy our files used for building the RPM on the host server
+cp /drone/src/deploy/rpm/signrepo /store/
+sed -i "s/%%PASSPHRASE%%/$GPG_PASSPHRASE/g" /store/signrepo
+cp /drone/src/deploy/rpm/publish.sh /store/
+chmod 700 /store/signrepo
+chmod 700 /store/publish.sh

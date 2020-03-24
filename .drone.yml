@@ -18,7 +18,7 @@ steps:
   - scripts/build.sh
 
 
-- name: fedora-31
+- name: build-rpm
   image: fedora:31
   depends_on:
   - build-ava
@@ -28,47 +28,73 @@ steps:
   environment:
     GIT_TAG: "${DRONE_TAG}"
     GIT_COMMIT: "${DRONE_COMMIT_SHA:0:8}"
+    GPG_PASSPHRASE:
+      from_secret: gpg_passphrase
   commands:
   - deploy/rpm/build.sh
 
 
-#- name: scp files
-#  image: appleboy/drone-scp
-#  volumes:
-#    - name: cache
-#      path: /cache
-#  settings:
-#    host: 50.116.4.66
-#    username: root
-#    password:
-#      from_secret: ssh_password
-#    port: 22
-#    target: /tmp/build/
-#    source: /cache/*.rpm
-
-- name: ubuntu-18.04
-  image: ubuntu:bionic
+- name: copy-rpm-to-repo
+  image: appleboy/drone-scp
   depends_on:
-  - build-ava
-  volumes:
-  - name: store
-    path: /store
-  environment:
-    GIT_TAG: "${DRONE_TAG}"
-    GIT_COMMIT: "${DRONE_COMMIT_SHA:0:8}"
-  commands:
-    - apt-get -y update
-    - deploy/deb/build.sh
-
-
-- name: test
-  image: alpine
-  depends_on:
-  - fedora-31
-  - ubuntu-18.04
+    - build-rpm
   volumes:
     - name: store
       path: /store
-  commands:
-    - ls -la /store/
+  settings:
+    host: 50.116.4.66
+    username: repo
+    password:
+      from_secret: repo_ssh_password
+    port: 22
+    target:
+    - /tmp/
+    - /home/repo/signrepo
+    - /home/repo/publish.sh
+    source:
+    - /store/*.rpm
+    - /store/signrepo
+    - /store/publish.sh
+
+
+- name: sign-rpm-repo
+  image: appleboy/drone-ssh
+  depends_on:
+    - copy-rpm-to-repo
+  settings:
+    host: 50.116.4.66
+    username: repo
+    password:
+      from_secret: repo_ssh_password
+    port: 22
+    script:
+      - /home/repo/publish.sh
+
+
+#- name: build-deb
+#  image: ubuntu:bionic
+#  depends_on:
+#  - build-ava
+#  volumes:
+#  - name: store
+#    path: /store
+#  environment:
+#    GIT_TAG: "${DRONE_TAG}"
+#    GIT_COMMIT: "${DRONE_COMMIT_SHA:0:8}"
+#  commands:
+#    - apt-get -y update
+#    - deploy/deb/build.sh
+
+
+
+#- name: test
+#  image: alpine
+#  depends_on:
+#  - fedora-31
+#  - ubuntu-18.04
+#  volumes:
+#    - name: store
+#      path: /store
+#  commands:
+#    - ls -la /store/
 
