@@ -7,21 +7,21 @@ volumes:
     temp: {}
 
 steps:
-#- name: build-ava
-#  image: golang:1.13.9-buster
-#  when:
-#    branch: master
-#    event: push
-#  commands:
-#  - apt-get -y update
-#  - apt-get -y install cmake libssl-dev libuv1-dev
-#  - scripts/build.sh
+- name: build-ava
+  image: golang:1.13.9-buster
+  when:
+    branch: master
+    event: push
+  commands:
+  - apt-get -y update
+  - apt-get -y install cmake libssl-dev libuv1-dev
+  - scripts/build.sh
 
 
 - name: build-rpm
   image: fedora:31
-#  depends_on:
-#  - build-ava
+  depends_on:
+  - build-ava
   volumes:
   - name: store
     path: /store

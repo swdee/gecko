@@ -3,24 +3,19 @@
 # script used for building RPM packages
 
 # write passphrase to file for rpm signing
-GPASS="/tmp/.gpass"
+GPASS="/root/.gpass"
 echo "$GPG_PASSPHRASE" > $GPASS
 
 # import GPG key
-GKEY="/tmp/.gkey.asc"
+GKEY="/root/.gkey.asc"
 echo $GPG_KEY | base64 -d > $GKEY
 gpg --import --batch --pinentry-mode loopback --passphrase-file=$GPASS $GKEY
 
 # make the imported key trusted
 yum install -y expect
 KEY_ID=`gpg --list-keys --with-colons '<builds@avalabs.org>' | awk -F: '/^fpr:/ { print $10 }'`
-echo "key id=${KEY_ID}"
+echo "Got Key ID=${KEY_ID}"
 expect -c "spawn gpg --edit-key ${KEY_ID} trust quit; send \"5\ry\r\"; expect eof"
-
-gpg --list-keys
-gpg --list-secret-keys
-
-exit 1
 
 # directory to build RPMs in
 RPMDIR=/tmp/rpm
