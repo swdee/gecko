@@ -6,7 +6,7 @@ volumes:
   - name: store
     temp: {}
 
-#steps:
+steps:
 #- name: build-ava
 #  image: golang:1.13.9-buster
 #  when:
