@@ -2,6 +2,20 @@
 #
 # script used for building RPM packages
 
+# write passphrase to file for rpm signing
+GPASS="/tmp/.gpass"
+echo "$GPG_PASSPHRASE" > $GPASS
+
+# import GPG key
+GKEY="/tmp/.gkey.asc"
+echo $GPG_KEY | base64 -d > $GKEY
+
+cat $GKEY
+
+gpg --import $GKEY
+
+exit 1
+
 # directory to build RPMs in
 RPMDIR=/tmp/rpm
 
@@ -13,11 +27,18 @@ mkdir -p BUILD RPMS/`uname -i` SOURCES SPECS SRPMS
 # create rpm macro file
 cat <<EOF >> ~/.rpmmacros
 %_signature gpg
-%_gpg_name RPM Builds <builds@avalabs.org>
+%_gpg_name AVALabs <builds@avalabs.org>
 
 %packager      RPM Builds <builds@avalabs.org>
 %vendor        AVALabs
 %_topdir       ${RPMDIR}
+
+%__gpg_sign_cmd %{__gpg} \
+    gpg --no-verbose --no-armor --batch --pinentry-mode loopback --passphrase-file=${GPASS} \
+    %{?_gpg_digest_algo:--digest-algo %{_gpg_digest_algo}} \
+    --no-secmem-warning \
+    %{?_gpg_sign_cmd_extra_args:%{_gpg_sign_cmd_extra_args}} \
+    -u "%{_gpg_name}" -sbo %{__signature_filename} %{__plaintext_filename}
 EOF
 
 # copy files into rpm build directories
@@ -56,7 +77,7 @@ sed -i "s/%%RPM_VER%%/$RPM_VER/g" ava.spec
 sed -i "s/%%RPM_REL%%/$RPM_REL/g" ava.spec
 
 # build RPM
-rpmbuild -bb ava.spec
+rpmbuild -bb --sign ava.spec
 
 # install RPM and test the binaries are working
 yum -y localinstall $RPMDIR/RPMS/x86_64/avalabs-gecko-*.`uname -i`.rpm
@@ -69,8 +90,11 @@ yum -y localinstall $RPMDIR/RPMS/x86_64/avalabs-gecko-*.`uname -i`.rpm
 cp $RPMDIR/RPMS/x86_64/*.rpm /store/
 
 # copy our files used for building the RPM on the host server
-cp /drone/src/deploy/rpm/signrepo /store/
-sed -i "s/%%PASSPHRASE%%/$GPG_PASSPHRASE/g" /store/signrepo
+#cp /drone/src/deploy/rpm/signrepo /store/
+#sed -i "s/%%PASSPHRASE%%/$GPG_PASSPHRASE/g" /store/signrepo
 cp /drone/src/deploy/rpm/publish.sh /store/
-chmod 700 /store/signrepo
+#chmod 700 /store/signrepo
 chmod 700 /store/publish.sh
+
+
+rpm -qpi /store/*.rpm

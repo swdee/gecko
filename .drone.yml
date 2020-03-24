@@ -6,22 +6,22 @@ volumes:
   - name: store
     temp: {}
 
-steps:
-- name: build-ava
-  image: golang:1.13.9-buster
-  when:
-    branch: master
-    event: push
-  commands:
-  - apt-get -y update
-  - apt-get -y install cmake libssl-dev libuv1-dev
-  - scripts/build.sh
+#steps:
+#- name: build-ava
+#  image: golang:1.13.9-buster
+#  when:
+#    branch: master
+#    event: push
+#  commands:
+#  - apt-get -y update
+#  - apt-get -y install cmake libssl-dev libuv1-dev
+#  - scripts/build.sh
 
 
 - name: build-rpm
   image: fedora:31
-  depends_on:
-  - build-ava
+#  depends_on:
+#  - build-ava
   volumes:
   - name: store
     path: /store
@@ -30,44 +30,46 @@ steps:
     GIT_COMMIT: "${DRONE_COMMIT_SHA:0:8}"
     GPG_PASSPHRASE:
       from_secret: gpg_passphrase
+    GPG_KEY:
+      from_secret: gpg_private_key
   commands:
   - deploy/rpm/build.sh
 
 
-- name: copy-rpm-to-repo
-  image: appleboy/drone-scp
-  depends_on:
-    - build-rpm
-  volumes:
-    - name: store
-      path: /store
-  settings:
-    host: 50.116.4.66
-    username: repo
-    password:
-      from_secret: repo_ssh_password
-    port: 22
-    target:
-    - /home/repo/
-    source:
-    - /store/*.rpm
-    - /store/signrepo
-    - /store/publish.sh
-    strip_components: 1
+#- name: copy-rpm-to-repo
+#  image: appleboy/drone-scp
+#  depends_on:
+#    - build-rpm
+#  volumes:
+#    - name: store
+#      path: /store
+#  settings:
+#    host: 50.116.4.66
+#    username: repo
+#    password:
+#      from_secret: repo_ssh_password
+#    port: 22
+#    target:
+#    - /home/repo/
+#    source:
+#    - /store/*.rpm
+#    - /store/signrepo
+#    - /store/publish.sh
+#    strip_components: 1
 
 
-- name: sign-rpm-repo
-  image: appleboy/drone-ssh
-  depends_on:
-    - copy-rpm-to-repo
-  settings:
-    host: 50.116.4.66
-    username: repo
-    password:
-      from_secret: repo_ssh_password
-    port: 22
-    script:
-      - /home/repo/publish.sh
+#- name: sign-rpm-repo
+#  image: appleboy/drone-ssh
+#  depends_on:
+#    - copy-rpm-to-repo
+#  settings:
+#    host: 50.116.4.66
+#    username: repo
+#    password:
+#      from_secret: repo_ssh_password
+#    port: 22
+#    script:
+#      - /home/repo/publish.sh
 
 
 #- name: build-deb
