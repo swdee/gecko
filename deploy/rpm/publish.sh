@@ -4,7 +4,7 @@
 # repository metadata
 
 # source of build RPM file/s on host server
-RPM_SRC="/tmp/*.rpm"
+RPM_SRC="/home/repo/*.rpm"
 
 REPO_BASE=/home/repo/yum
 OS_LIST=(

@@ -48,13 +48,12 @@ steps:
       from_secret: repo_ssh_password
     port: 22
     target:
-    - /tmp/
-    - /home/repo/signrepo
-    - /home/repo/publish.sh
+    - /home/repo/
     source:
     - /store/*.rpm
     - /store/signrepo
     - /store/publish.sh
+    strip_components: 1
 
 
 - name: sign-rpm-repo
