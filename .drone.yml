@@ -36,40 +36,39 @@ steps:
   - deploy/rpm/build.sh
 
 
-#- name: copy-rpm-to-repo
-#  image: appleboy/drone-scp
-#  depends_on:
-#    - build-rpm
-#  volumes:
-#    - name: store
-#      path: /store
-#  settings:
-#    host: 50.116.4.66
-#    username: repo
-#    password:
-#      from_secret: repo_ssh_password
-#    port: 22
-#    target:
-#    - /home/repo/
-#    source:
-#    - /store/*.rpm
-#    - /store/signrepo
-#    - /store/publish.sh
-#    strip_components: 1
+- name: copy-rpm-to-repo
+  image: appleboy/drone-scp
+  depends_on:
+    - build-rpm
+  volumes:
+    - name: store
+      path: /store
+  settings:
+    host: 50.116.4.66
+    username: repo
+    password:
+      from_secret: repo_ssh_password
+    port: 22
+    target:
+    - /home/repo/
+    source:
+    - /store/*.rpm
+    - /store/publish.sh
+    strip_components: 1
 
 
-#- name: sign-rpm-repo
-#  image: appleboy/drone-ssh
-#  depends_on:
-#    - copy-rpm-to-repo
-#  settings:
-#    host: 50.116.4.66
-#    username: repo
-#    password:
-#      from_secret: repo_ssh_password
-#    port: 22
-#    script:
-#      - /home/repo/publish.sh
+- name: publish-rpm-repo
+  image: appleboy/drone-ssh
+  depends_on:
+    - copy-rpm-to-repo
+  settings:
+    host: 50.116.4.66
+    username: repo
+    password:
+      from_secret: repo_ssh_password
+    port: 22
+    script:
+      - /home/repo/publish.sh
 
 
 #- name: build-deb

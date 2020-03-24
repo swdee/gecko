@@ -25,7 +25,6 @@ OS_LIST=(
     "centos-unstable/8"
 )
 ARCH="x86_64"
-SIGNER=/home/repo/signrepo
 
 
 # update repo with new RPM for all distributions and versions
@@ -37,11 +36,10 @@ do
     cp $RPM_SRC $REPO_BASE/$OS/$ARCH/
 
     # sign RPM and update repo metadata
-    cd $REPO_BASE/$OS/$ARCH && $SIGNER && createrepo .
+    cd $REPO_BASE/$OS/$ARCH && createrepo .
 done
 
 
 # clean up build files
 rm -f $RPM_SRC
-rm -f /home/repo/signrepo
 rm -f /home/repo/publish.sh
