@@ -118,7 +118,7 @@ steps:
 
 
 - name: test-centos7
-  image: centos7
+  image: centos:centos7
   depends_on:
     - publish-rpm-repo
   environment:
@@ -129,7 +129,7 @@ steps:
 
 
 - name: test-centos8
-  image: centos8
+  image: centos:centos8
   depends_on:
     - publish-rpm-repo
   environment:
