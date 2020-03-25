@@ -18,17 +18,6 @@ steps:
   - scripts/build.sh
 
 
-
-- name: ls-store
-  image: alpine
-  volumes:
-    - name: store
-      path: /store
-  commands:
-    - ls -la /store/
-
-
-
 - name: build-rpm
   image: fedora:31
   depends_on:
@@ -83,17 +72,72 @@ steps:
       - /home/repo/publish.sh
 
 
+
 - name: test-fedora29
   image: fedora:29
   depends_on:
     - publish-rpm-repo
+  environment:
+    GIT_TAG: "${DRONE_TAG}"
+    OS: "fedora"
   commands:
-    - dnf -y install dnf-utils
-    - dnf config-manager --add-repo http://50.116.4.66:8080/yum/avalabs.repo
-    - dnf config-manager --set-enabled avalabs-fedora-unstable
-    - dnf -y install avalabs-gecko
-    - ava --help
-    - xputtest --help
+    - deploy/rpm/test.sh
+
+
+- name: test-fedora30
+  image: fedora:30
+  depends_on:
+    - publish-rpm-repo
+  environment:
+    GIT_TAG: "${DRONE_TAG}"
+    OS: "fedora"
+  commands:
+    - deploy/rpm/test.sh
+
+
+- name: test-fedora31
+  image: fedora:31
+  depends_on:
+    - publish-rpm-repo
+  environment:
+    GIT_TAG: "${DRONE_TAG}"
+    OS: "fedora"
+  commands:
+    - deploy/rpm/test.sh
+
+
+- name: test-fedora32
+  image: fedora:32
+  depends_on:
+    - publish-rpm-repo
+  environment:
+    GIT_TAG: "${DRONE_TAG}"
+    OS: "fedora"
+  commands:
+    - deploy/rpm/test.sh
+
+
+- name: test-centos7
+  image: centos7
+  depends_on:
+    - publish-rpm-repo
+  environment:
+    GIT_TAG: "${DRONE_TAG}"
+    OS: "centos"
+  commands:
+    - deploy/rpm/test.sh
+
+
+- name: test-centos8
+  image: centos8
+  depends_on:
+    - publish-rpm-repo
+  environment:
+    GIT_TAG: "${DRONE_TAG}"
+    OS: "centos"
+  commands:
+    - deploy/rpm/test.sh
+
 
 #- name: build-deb
 #  image: ubuntu:bionic
