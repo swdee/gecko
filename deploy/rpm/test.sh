@@ -8,10 +8,10 @@ dnf config-manager --add-repo http://50.116.4.66:8080/yum/avalabs.repo
 
 if [ "${GIT_TAG}" == "" ]; then
     # install nightly snapshot
-    dnf config-manager --set-enabled avalabs-fedora-unstable
+    dnf config-manager --set-enabled avalabs-${OS}-unstable
 else
     # tagged build
-    dnf config-manager --set-enabled avalabs-fedora
+    dnf config-manager --set-enabled avalabs-${OS}
 fi
 
 # install and test
