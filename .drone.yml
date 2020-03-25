@@ -18,6 +18,17 @@ steps:
   - scripts/build.sh
 
 
+
+- name: ls-store
+  image: alpine
+  volumes:
+    - name: store
+      path: /store
+  commands:
+    - ls -la /store/
+
+
+
 - name: build-rpm
   image: fedora:31
   depends_on:
@@ -52,8 +63,9 @@ steps:
     target:
     - /home/repo/
     source:
-    - /store/*.rpm
-    - /store/publish.sh
+    - /store/*
+#    - /store/*.rpm
+#    - /store/publish.sh
     strip_components: 1
 
 

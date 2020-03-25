@@ -50,6 +50,10 @@ cp /drone/src/deploy/rpm/ava.spec $RPMDIR/SPECS/
 # install system build tools
 yum -y install rpm-build rpm-sign
 
+# define the options for $MODE we can run in
+NIGHTLY="nightly"
+TAGGED="tagged"
+
 # read in an set environment variables used in ava.spec file for defining
 # the version and release numbers
 #
@@ -62,6 +66,7 @@ if [ "${GIT_TAG}" == "" ]; then
     DATE=`date "+%Y%m%d"`
     RPM_VER="0.0"
     RPM_REL="0.${DATE}git${GIT_COMMIT}"
+    MODE=$NIGHTLY
 else
     # tagged build
     # split version components from tag
@@ -70,6 +75,7 @@ else
     PATCH=${GIT_TAG:4:1}
     RPM_VER="${MAJOR}.${MINOR}"
     RPM_REL="${PATCH}"
+    MODE=$TAGGED
 fi
 
 # modify spec to replace our template variables
@@ -96,7 +102,8 @@ rpm -qpi $RPMDIR/RPMS/x86_64/*.rpm
 #xputtest --help
 
 # copy built rpm to mounted store volume
-cp $RPMDIR/RPMS/x86_64/*.rpm /store/
+mkdir /store/$MODE
+cp $RPMDIR/RPMS/x86_64/*.rpm /store/$MODE/
 
 # copy our files used for building the RPM on the host server
 cp /drone/src/deploy/rpm/publish.sh /store/

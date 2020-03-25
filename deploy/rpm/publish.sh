@@ -4,7 +4,8 @@
 # repository metadata
 
 # source of build RPM file/s on host server
-RPM_SRC="/home/repo/*.rpm"
+RPM_STABLE="/home/repo/tagged/*.rpm"
+RPM_UNSTABLE="/home/repo/nightly/*.rpm"
 
 REPO_BASE=/home/repo/yum
 OS_LIST=(
@@ -32,6 +33,12 @@ for OS in ${OS_LIST[@]}
 do
     echo "Building repo for: ${OS}"
 
+    # check if stable/unstable repo
+    RPM_SRC=$RPM_STABLE
+    if [[ $OS == *"-unstable"* ]]; then
+        RPM_SRC=$RPM_UNSTABLE
+    fi
+
     # copy RPM into place
     cp $RPM_SRC $REPO_BASE/$OS/$ARCH/
 
@@ -41,5 +48,6 @@ done
 
 
 # clean up build files
-rm -f $RPM_SRC
+rm -f $RPM_STABLE
+rm -f $RPM_UNSTABLE
 rm -f /home/repo/publish.sh
