@@ -83,6 +83,18 @@ steps:
       - /home/repo/publish.sh
 
 
+- name: test-fedora29
+  image: fedora:29
+  depends_on:
+    - publish-rpm-repo
+  commands:
+    - dnf -y install dnf-utils
+    - dnf config-manager --add-repo http://50.116.4.66:8080/yum/avalabs.repo
+    - dnf config-manager --set-enabled avalabs-fedora-unstable
+    - dnf -y install avalabs-gecko
+    - ava --help
+    - xputtest --help
+
 #- name: build-deb
 #  image: ubuntu:bionic
 #  depends_on:
