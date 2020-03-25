@@ -2,6 +2,9 @@
 #
 # script used for building DEB packages
 
+# run update to connect to ppa repos for later install commands
+apt-get -y update
+
 # install tools for building deb package
 apt-get -y install build-essential devscripts debhelper
 
