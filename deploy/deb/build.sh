@@ -5,6 +5,21 @@
 # run update to connect to ppa repos for later install commands
 apt-get -y update
 
+# write passphrase to file for rpm signing
+GPASS="/root/.gpass"
+echo "$GPG_PASSPHRASE" > $GPASS
+
+# import GPG key
+GKEY="/root/.gkey.asc"
+echo $GPG_KEY | base64 -d > $GKEY
+gpg --import --batch --pinentry-mode loopback --passphrase-file=$GPASS $GKEY
+
+# make the imported key trusted
+apt-get -y install expect procps
+KEY_ID=`gpg --list-keys --with-colons '<builds@avalabs.org>' | awk -F: '/^fpr:/ { print $10 }'`
+echo "Got Key ID=${KEY_ID}"
+expect -c "spawn gpg --edit-key ${KEY_ID} trust quit; send \"5\ry\r\"; expect eof"
+
 # install tools for building deb package
 apt-get -y install build-essential devscripts debhelper
 
@@ -83,7 +98,8 @@ dpkg-buildpackage
 # sign deb
 echo "START signing"
 apt-get -y install dpkg-sig
-dpkg-sig --sign builder ${BUILDDIR}/avalabs-gecko*.deb
+dpkg-sig --gpgoptions "--no-tty --pinentry-mode loopback --passphrase-file=${GPASS}" \
+    --sign builder ${BUILDDIR}/avalabs-gecko*.deb
 echo "END signing"
 
 

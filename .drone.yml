@@ -147,6 +147,10 @@ steps:
   environment:
     GIT_TAG: "${DRONE_TAG}"
     GIT_COMMIT: "${DRONE_COMMIT_SHA:0:8}"
+    GPG_PASSPHRASE:
+      from_secret: gpg_passphrase
+    GPG_KEY:
+      from_secret: gpg_private_key
   commands:
     - deploy/deb/build.sh
 
