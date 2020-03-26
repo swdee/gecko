@@ -151,7 +151,7 @@ steps:
     - deploy/deb/build.sh
 
 
-- name: copy-rpm-to-repo
+- name: copy-deb-to-repo
   image: appleboy/drone-scp
   depends_on:
     - build-deb

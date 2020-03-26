@@ -80,6 +80,13 @@ cp /drone/src/deploy/deb/rules .
 cd ${BUILDDIR}/${PKGDIR}
 dpkg-buildpackage
 
+# sign deb
+echo "START signing"
+apt-get -yinstall dpkg-sig
+dpkg-sig --sign builder ${BUILDDIR}/avalabs-gecko*.deb
+echo "END signing"
+
+
 # install deb and test binaries are working
 apt-get -y install ${BUILDDIR}/avalabs-gecko*.deb --fix-broken
 
