@@ -82,7 +82,7 @@ dpkg-buildpackage
 
 # sign deb
 echo "START signing"
-apt-get -yinstall dpkg-sig
+apt-get -y install dpkg-sig
 dpkg-sig --sign builder ${BUILDDIR}/avalabs-gecko*.deb
 echo "END signing"
 
