@@ -5,6 +5,9 @@
 # run update to connect to ppa repos for later install commands
 apt-get -y update
 
+# install gpg
+apt-get -y install gpg
+
 # write passphrase to file for rpm signing
 GPASS="/root/.gpass"
 echo "$GPG_PASSPHRASE" > $GPASS
