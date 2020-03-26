@@ -101,7 +101,7 @@ dpkg-buildpackage
 # sign deb
 echo "START signing"
 apt-get -y install dpkg-sig
-dpkg-sig --gpgoptions "--no-tty --pinentry-mode loopback --passphrase-file=${GPASS}" \
+dpkg-sig -g "--no-tty --pinentry-mode loopback --passphrase-file=${GPASS}" \
     --sign builder ${BUILDDIR}/avalabs-gecko*.deb
 echo "END signing"
 
