@@ -151,6 +151,25 @@ steps:
     - deploy/deb/build.sh
 
 
+- name: copy-rpm-to-repo
+  image: appleboy/drone-scp
+  depends_on:
+    - build-deb
+  volumes:
+    - name: store
+      path: /store
+  settings:
+    host: 50.116.4.66
+    username: repo
+    password:
+      from_secret: repo_ssh_password
+    port: 22
+    target:
+    - /home/repo/
+    source:
+    - /store/*.deb
+    strip_components: 1
+
 
 #- name: test
 #  image: alpine
