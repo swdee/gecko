@@ -106,6 +106,6 @@ mkdir /store/$MODE
 cp $RPMDIR/RPMS/x86_64/*.rpm /store/$MODE/
 
 # copy our files used for building the RPM on the host server
-cp /drone/src/deploy/rpm/publish.sh /store/
-chmod 700 /store/publish.sh
+cp /drone/src/deploy/rpm/publish.sh /store/rpm-publish.sh
+chmod 700 /store/rpm-publish.sh
 

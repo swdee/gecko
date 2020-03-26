@@ -67,7 +67,7 @@ steps:
 #      from_secret: repo_ssh_password
 #    port: 22
 #    script:
-#      - /home/repo/publish.sh
+#      - /home/repo/rpm-publish.sh
 
 
 
@@ -171,9 +171,22 @@ steps:
     target:
     - /home/repo/
     source:
-    - /store/*.deb
+    - /store/*
     strip_components: 1
 
+
+- name: publish-deb-repo
+  image: appleboy/drone-ssh
+  depends_on:
+    - copy-deb-to-repo
+  settings:
+    host: 50.116.4.66
+    username: repo
+    password:
+      from_secret: repo_ssh_password
+    port: 22
+    script:
+      - /home/repo/deb-publish.sh
 
 #- name: test
 #  image: alpine

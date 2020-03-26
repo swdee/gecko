@@ -3,7 +3,7 @@
 # script used for publishing the built RPM and updating the YUM
 # repository metadata
 
-# source of build RPM file/s on host server
+# source of built RPM file/s on host server
 RPM_STABLE="/home/repo/tagged/*.rpm"
 RPM_UNSTABLE="/home/repo/nightly/*.rpm"
 
@@ -50,4 +50,4 @@ done
 # clean up build files
 rm -f $RPM_STABLE
 rm -f $RPM_UNSTABLE
-rm -f /home/repo/publish.sh
+rm -f /home/repo/rpm-publish.sh

@@ -29,6 +29,10 @@ apt-get -y install build-essential devscripts debhelper
 # define directory for building
 BUILDDIR=/tmp/build
 
+# define the options for $MODE we can run in
+NIGHTLY="nightly"
+TAGGED="tagged"
+
 # read in an set environment variables used in ava.spec file for defining
 # the version and release numbers
 #
@@ -41,6 +45,7 @@ if [ "${GIT_TAG}" == "" ]; then
     DATE=`date "+%Y%m%d"`
     RPM_VER="0.0"
     RPM_REL="0.${DATE}git${GIT_COMMIT}"
+    MODE=$NIGHTLY
 else
     # tagged build
     # split version components from tag
@@ -49,6 +54,7 @@ else
     PATCH=${GIT_TAG:4:1}
     RPM_VER="${MAJOR}.${MINOR}"
     RPM_REL="${PATCH}"
+    MODE=$TAGGED
 fi
 
 # define package version using project major and minor version numbers
@@ -99,19 +105,23 @@ cd ${BUILDDIR}/${PKGDIR}
 dpkg-buildpackage
 
 # sign deb
-echo "START signing"
+echo "Sign DEB"
 apt-get -y install dpkg-sig
 dpkg-sig -g "--no-tty --pinentry-mode loopback --passphrase-file=${GPASS}" \
     --sign builder ${BUILDDIR}/avalabs-gecko*.deb
-echo "END signing"
 
 
 # install deb and test binaries are working
-apt-get -y install ${BUILDDIR}/avalabs-gecko*.deb --fix-broken
+#apt-get -y install ${BUILDDIR}/avalabs-gecko*.deb --fix-broken
 
 # disable tests until exit codes are corrected in code
 #ava --help
 #xputtest --help
 
-# copy built rpm to mounted store volume
-cp ${BUILDDIR}/avalabs-gecko*.{dsc,gz,buildinfo,changes,deb} /store/
+# copy built deb to mounted store volume
+mkdir /store/$MODE
+cp ${BUILDDIR}/avalabs-gecko*.deb /store/$MODE/
+
+# copy our files used for building the DEB on the host server
+cp /drone/src/deploy/deb/publish.sh /store/deb-publish.sh
+chmod 700 /store/deb-publish.sh
