@@ -188,6 +188,26 @@ steps:
     script:
       - /home/repo/deb-publish.sh
 
+
+- name: test-ubuntu-18.04
+  image: ubuntu:bionic
+  depends_on:
+    - publish-deb-repo
+  environment:
+    GIT_TAG: "${DRONE_TAG}"
+  commands:
+    - deploy/deb/test.sh
+
+- name: test-ubuntu-20.04
+  image: ubuntu:focal
+  depends_on:
+    - publish-deb-repo
+  environment:
+    GIT_TAG: "${DRONE_TAG}"
+  commands:
+    - deploy/deb/test.sh
+
+
 #- name: test
 #  image: alpine
 #  depends_on:

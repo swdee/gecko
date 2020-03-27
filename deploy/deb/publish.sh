@@ -9,8 +9,8 @@ DEB_UNSTABLE="/home/repo/nightly/*.deb"
 REPREPRO="/home/repo/reprepro-ex.sh"
 REPO_BASE=/home/repo/apt
 OS_LIST=(
-    "xenial/stable"
-    "xenial/unstable"
+#    "xenial/stable"
+#    "xenial/unstable"
     "bionic/stable"
     "bionic/unstable"
     "focal/stable"
