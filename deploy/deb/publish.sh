@@ -39,7 +39,7 @@ done
 
 
 # clean up build files
-#rm -f $DEB_STABLE
-#rm -f $DEB_UNSTABLE
-#rm -f /home/repo/deb-publish.sh
-#rm -f /home/repo/reprepro-ex.sh
+rm -f $DEB_STABLE
+rm -f $DEB_UNSTABLE
+rm -f /home/repo/deb-publish.sh
+rm -f /home/repo/reprepro-ex.sh
