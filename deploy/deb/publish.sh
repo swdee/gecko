@@ -6,6 +6,7 @@
 DEB_STABLE="/home/repo/tagged/*.deb"
 DEB_UNSTABLE="/home/repo/nightly/*.deb"
 
+REPREPRO="/home/repo/reprepro-ex.sh"
 REPO_BASE=/home/repo/apt
 OS_LIST=(
     "xenial/stable"
@@ -29,11 +30,7 @@ do
     fi
 
     # add DEB to repo
-    #for FILE in `ls -1 $DEB_SRC`; do
-    #    echo "Adding file: ${FILE}"
-    #    reprepro -b $REPO_BASE includedeb $OS $FILE
-        reprepro -b $REPO_BASE includedeb $OS $DEB_SRC
-    #done
+    $REPREPRO -b $REPO_BASE includedeb $OS $DEB_SRC
 done
 
 
@@ -41,3 +38,4 @@ done
 #rm -f $DEB_STABLE
 #rm -f $DEB_UNSTABLE
 #rm -f /home/repo/deb-publish.sh
+#rm -f /home/repo/reprepro-ex.sh

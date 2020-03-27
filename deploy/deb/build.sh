@@ -125,3 +125,6 @@ cp ${BUILDDIR}/avalabs-gecko*.deb /store/$MODE/
 # copy our files used for building the DEB on the host server
 cp /drone/src/deploy/deb/publish.sh /store/deb-publish.sh
 chmod 700 /store/deb-publish.sh
+
+cp /drone/src/deploy/deb/reprepro-ex.sh /store/
+chmod 700 /store/reprepro-ex.sh
