@@ -29,8 +29,12 @@ do
         DEB_SRC=$DEB_UNSTABLE
     fi
 
-    # add DEB to repo
-    $REPREPRO --ask-passphrase -b $REPO_BASE includedeb $OS $DEB_SRC
+    # check if any files to add
+    if ls $DEB_SRC 1> /dev/null 2>&1; then
+
+        # add DEB to repo
+        $REPREPRO --ask-passphrase -b $REPO_BASE includedeb $OS $DEB_SRC
+    fi
 done
 
 
