@@ -8,7 +8,7 @@ apt-get update -y
 apt-get -y install wget lsb-release software-properties-common
 
 # install APT repo GPG key
-wget -qO - http://50.116.4.66:8080/yum/RPM-GPG-KEY | sudo apt-key add -
+wget -qO - http://50.116.4.66:8080/yum/RPM-GPG-KEY | apt-key add -
 
 # Add APT repo
 if [ "${GIT_TAG}" == "" ]; then
