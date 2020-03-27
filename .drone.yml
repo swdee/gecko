@@ -18,101 +18,101 @@ steps:
   - scripts/build.sh
 
 
-#- name: build-rpm
-#  image: fedora:31
-#  depends_on:
-#  - build-ava
-#  volumes:
-#  - name: store
-#    path: /store
-#  environment:
-#    GIT_TAG: "${DRONE_TAG}"
-#    GIT_COMMIT: "${DRONE_COMMIT_SHA:0:8}"
-#    GPG_PASSPHRASE:
-#      from_secret: gpg_passphrase
-#    GPG_KEY:
-#      from_secret: gpg_private_key
-#  commands:
-#  - deploy/rpm/build.sh
+- name: build-rpm
+  image: fedora:31
+  depends_on:
+  - build-ava
+  volumes:
+  - name: store
+    path: /store
+  environment:
+    GIT_TAG: "${DRONE_TAG}"
+    GIT_COMMIT: "${DRONE_COMMIT_SHA:0:8}"
+    GPG_PASSPHRASE:
+      from_secret: gpg_passphrase
+    GPG_KEY:
+      from_secret: gpg_private_key
+  commands:
+  - deploy/rpm/build.sh
 
 
-#- name: copy-rpm-to-repo
-#  image: appleboy/drone-scp
-#  depends_on:
-#    - build-rpm
-#  volumes:
-#    - name: store
-#      path: /store
-#  settings:
-#    host: 50.116.4.66
-#    username: repo
-#    password:
-#      from_secret: repo_ssh_password
-#    port: 22
-#    target:
-#    - /home/repo/
-#    source:
-#    - /store/*
-#    strip_components: 1
+- name: copy-rpm-to-repo
+  image: appleboy/drone-scp
+  depends_on:
+    - build-rpm
+  volumes:
+    - name: store
+      path: /store
+  settings:
+    host: 50.116.4.66
+    username: repo
+    password:
+      from_secret: repo_ssh_password
+    port: 22
+    target:
+    - /home/repo/
+    source:
+    - /store/*
+    strip_components: 1
 
 
-#- name: publish-rpm-repo
-#  image: appleboy/drone-ssh
-#  depends_on:
-#    - copy-rpm-to-repo
-#  settings:
-#    host: 50.116.4.66
-#    username: repo
-#    password:
-#      from_secret: repo_ssh_password
-#    port: 22
-#    script:
-#      - /home/repo/rpm-publish.sh
+- name: publish-rpm-repo
+  image: appleboy/drone-ssh
+  depends_on:
+    - copy-rpm-to-repo
+  settings:
+    host: 50.116.4.66
+    username: repo
+    password:
+      from_secret: repo_ssh_password
+    port: 22
+    script:
+      - /home/repo/rpm-publish.sh
 
 
 
-#- name: test-fedora29
-#  image: fedora:29
-#  depends_on:
-#    - publish-rpm-repo
-#  environment:
-#    GIT_TAG: "${DRONE_TAG}"
-#    OS: "fedora"
-#  commands:
-#    - deploy/rpm/test.sh
+- name: test-fedora29
+  image: fedora:29
+  depends_on:
+    - publish-rpm-repo
+  environment:
+    GIT_TAG: "${DRONE_TAG}"
+    OS: "fedora"
+  commands:
+    - deploy/rpm/test.sh
 
 
-#- name: test-fedora30
-#  image: fedora:30
-#  depends_on:
-#    - publish-rpm-repo
-#  environment:
-#    GIT_TAG: "${DRONE_TAG}"
-#    OS: "fedora"
-#  commands:
-#    - deploy/rpm/test.sh
+- name: test-fedora30
+  image: fedora:30
+  depends_on:
+    - publish-rpm-repo
+  environment:
+    GIT_TAG: "${DRONE_TAG}"
+    OS: "fedora"
+  commands:
+    - deploy/rpm/test.sh
 
 
-#- name: test-fedora31
-#  image: fedora:31
-#  depends_on:
-#    - publish-rpm-repo
-#  environment:
-#    GIT_TAG: "${DRONE_TAG}"
-#    OS: "fedora"
-#  commands:
-#    - deploy/rpm/test.sh
+- name: test-fedora31
+  image: fedora:31
+  depends_on:
+    - publish-rpm-repo
+  environment:
+    GIT_TAG: "${DRONE_TAG}"
+    OS: "fedora"
+  commands:
+    - deploy/rpm/test.sh
 
 
-#- name: test-fedora32
-#  image: fedora:32
-#  depends_on:
-#    - publish-rpm-repo
-#  environment:
-#    GIT_TAG: "${DRONE_TAG}"
-#    OS: "fedora"
-#  commands:
-#    - deploy/rpm/test.sh
+- name: test-fedora32
+  image: fedora:32
+  depends_on:
+    - publish-rpm-repo
+  environment:
+    GIT_TAG: "${DRONE_TAG}"
+    OS: "fedora"
+  commands:
+    - deploy/rpm/test.sh
 
 
 #- name: test-centos7
@@ -207,15 +207,4 @@ steps:
   commands:
     - deploy/deb/test.sh
 
-
-#- name: test
-#  image: alpine
-#  depends_on:
-#  - fedora-31
-#  - ubuntu-18.04
-#  volumes:
-#    - name: store
-#      path: /store
-#  commands:
-#    - ls -la /store/
 
