@@ -29,10 +29,11 @@ do
     fi
 
     # add DEB to repo
-    for FILE in `ls -1 $DEB_SRC`; do
-        echo "Adding file: ${FILE}"
-        reprepro -b $REPO_BASE includedeb $OS $FILE
-    done
+    #for FILE in `ls -1 $DEB_SRC`; do
+    #    echo "Adding file: ${FILE}"
+    #    reprepro -b $REPO_BASE includedeb $OS $FILE
+        reprepro -b $REPO_BASE includedeb $OS $DEB_SRC
+    #done
 done
 
 
