@@ -30,7 +30,7 @@ do
     fi
 
     # add DEB to repo
-    $REPREPRO -b $REPO_BASE includedeb $OS $DEB_SRC
+    $REPREPRO --ask-passphrase -b $REPO_BASE includedeb $OS $DEB_SRC
 done
 
 
